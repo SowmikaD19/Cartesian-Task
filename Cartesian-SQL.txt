@@ -1,4 +1,28 @@
-SQL QUESTION 2
+
+## SQL QUESTION 1
+
+create view T2 as
+(select product_catalogue.cat_id, product_catalogue.product_id,  
+DENSE_RANK() over ( partition by product_catalogue.cat_id order by purchase_history.Bill_date desc) trending
+from product_catalogue
+left join purchase_history
+on purchase_history.Product_Id = product_catalogue.product_id 
+);
+select * from T2;
+
+SELECT *
+FROM   T2 s
+WHERE 
+        (
+            SELECT  COUNT(*) 
+            FROM    T2 f
+            WHERE f.cat_id = s.cat_id AND 
+                  f.trending <= s.trending
+        ) <= 3;
+
+------------------------------------------------------------------
+
+## SQL QUESTION 2
 
 
 CREATE TABLE Customer (Customer_Id varchar(255));
@@ -14,3 +38,5 @@ CREATE TABLE Customer (Customer_Id varchar(255));
  select Customer_Id Customer_Key,Voucher_Id Gift_Voucher_Key
  from cte c1
  join cte2 c2 on c1.rr=c2.rr
+
+------------------------------------------------------------------
